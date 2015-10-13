@@ -13,9 +13,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+set -o pipefail
+set -e
+
+DEVICE=/sys/devices/platform/bcm2708_usb/buspower
+
+if [ ! -f ${DEVICE} ]; then
+  DEVICE=/sys/devices/platform/soc/3f980000.usb/buspower
+fi
+
 echo "Power-cycling USB to fix dead Carelink stick"
 sleep 0.1
-echo 0 > /sys/devices/platform/bcm2708_usb/buspower
+echo 0 > ${DEVICE}
 sleep 1
-echo 1 > /sys/devices/platform/bcm2708_usb/buspower
+echo 1 > ${DEVICE}
 sleep 2
+
+exit 0
